@@ -23,7 +23,7 @@ import  userEvent  from "@testing-library/user-event"
 
 
 describe("AddReviewForm", () => {
-  const mockRemovePopup = jest.fn();
+  let mockRemovePopup;
   const mockListing = {
     name: "shirt",
     shopId: "456",
@@ -31,6 +31,7 @@ describe("AddReviewForm", () => {
   };
 
   it("renders as a form with a delete button", () => {
+    mockRemovePopup = jest.fn()
     render(
       <Provider store={mockStore}>
         <ListingContext.Provider value={mockListing}>
@@ -42,7 +43,7 @@ describe("AddReviewForm", () => {
   });
 
   it("unmounts when delete button is clicked", () => {
-    
+    mockRemovePopup = jest.fn()
     render(
       <Provider store={mockStore}>
         <ListingContext.Provider value={mockListing}>
@@ -51,13 +52,14 @@ describe("AddReviewForm", () => {
       </Provider>
     );
 
-    userEvent.click(screen.getByRole("button", { name: "4"}));
+    userEvent.click(screen.getByAltText("4 stars"));
     userEvent.click(screen.getByRole("button", { name: "Post your review" }));
     expect(mockRemovePopup).toHaveBeenCalled();
         
 });
 
   it("submits a review and unmounts when a click is registered outside of the component", () => {
+    mockRemovePopup=jest.fn()
     render(
       <Provider store={mockStore}>
         <ListingContext.Provider value={mockListing}>
@@ -72,6 +74,7 @@ describe("AddReviewForm", () => {
   });
 
   it("will not submit a review if the required fields are not filled out", () => {
+    mockRemovePopup = jest.fn()
     render(
       <Provider store={mockStore}>
         <ListingContext.Provider value={mockListing}>
@@ -99,7 +102,8 @@ describe("AddReviewForm", () => {
     expect(screen.getByText("You must select a number of stars.")).toBeInTheDocument()
   });
 
-  it.only("updates listing's reviews when form is submitted", () => {
+  it("updates listing's reviews when form is submitted", () => {
+    mockRemovePopup = jest.fn()
     render(
       <Provider store={mockStore}>
         <ListingContext.Provider value={mockListing}>
@@ -111,7 +115,7 @@ describe("AddReviewForm", () => {
     const file = new File(['test'], 'test.png', { type: 'image/png'})
 
     userEvent.type(screen.getByRole("textbox"), "I love this item!");
-    userEvent.click(screen.getByRole("button", { name: "4"}));
+    userEvent.click(screen.getByAltText("4 stars"));
     userEvent.upload(screen.getByTitle("review-photo"), file)
     userEvent.click(screen.getByRole("button", { name: "Post your review"}))
     
