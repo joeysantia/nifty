@@ -1,0 +1,16 @@
+.star-buttons {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 6px;
+    gap: 4px;
+}
+
+.star-buttons > img {
+    height: 30px;
+    cursor: pointer;
+}
+
+.star-buttons > img:hover {
+    opacity: 0.6;
+}
+
