@@ -1,0 +1,17 @@
+
+.listing-blurb {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*justify-content: center;*/
+    border: 2px solid black;
+    padding: 8px 16px;
+    width: 250px;
+    height: 400px;
+    box-sizing: border-box;
+    
+}
+
+.listing-blurb > img {
+    height: 150px;
+}
