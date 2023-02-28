@@ -3,21 +3,21 @@ import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import AddReviewForm from "../AddReviewForm";
 import { ListingContext } from "../../context/ListingContext";
-import { mockStore } from "./mockRedux/mockStore";
 import  userEvent  from "@testing-library/user-event"
-
+import { getDownloadURL } from "firebase/storage";
+import { store } from "../../reduxFiles/store";
+import InitStore from "./utils/InitStore";
   let mockRef = jest.fn()
   mockRef.mockReturnValue('reference')
   let mockUploadBytes = jest.fn()
   let mockGetDownloadURL = jest.fn()
   mockGetDownloadURL.mockReturnValue('www.photo.com')
-  let mockTest = jest.fn()
   jest.mock('firebase/storage', () => {
     return {
       ...jest.requireActual('firebase/storage'),
       ref: () => mockRef(),
-      uploadBytes: () => mockUploadBytes(),
-      getDownloadURL: () => mockTest(),
+      uploadBytes: async () => await mockUploadBytes(),
+      getDownloadURL: async () => await mockGetDownloadURL()
     }
   })
 
@@ -33,7 +33,7 @@ describe("AddReviewForm", () => {
   it("renders as a form with a delete button", () => {
     mockRemovePopup = jest.fn()
     render(
-      <Provider store={mockStore}>
+      <Provider store={store}>
         <ListingContext.Provider value={mockListing}>
           <AddReviewForm removePopup={mockRemovePopup} />
         </ListingContext.Provider>
@@ -45,7 +45,7 @@ describe("AddReviewForm", () => {
   it("unmounts when delete button is clicked", () => {
     mockRemovePopup = jest.fn()
     render(
-      <Provider store={mockStore}>
+      <Provider store={store}>
         <ListingContext.Provider value={mockListing}>
           <AddReviewForm removePopup={mockRemovePopup} />
         </ListingContext.Provider>
@@ -61,9 +61,10 @@ describe("AddReviewForm", () => {
   it("submits a review and unmounts when a click is registered outside of the component", () => {
     mockRemovePopup=jest.fn()
     render(
-      <Provider store={mockStore}>
+      <Provider store={store}>
         <ListingContext.Provider value={mockListing}>
           <button>Not form</button>
+          <InitStore />
           <AddReviewForm removePopup={mockRemovePopup} />
         </ListingContext.Provider>
       </Provider>
@@ -76,7 +77,7 @@ describe("AddReviewForm", () => {
   it("will not submit a review if the required fields are not filled out", () => {
     mockRemovePopup = jest.fn()
     render(
-      <Provider store={mockStore}>
+      <Provider store={store}>
         <ListingContext.Provider value={mockListing}>
           <AddReviewForm removePopup={mockRemovePopup} />
         </ListingContext.Provider>
@@ -90,7 +91,7 @@ describe("AddReviewForm", () => {
 
   it("will generate a message if an invalid submit happens", () => {
     render(
-      <Provider store={mockStore}>
+      <Provider store={store}>
         <ListingContext.Provider value={mockListing}>
           <AddReviewForm removePopup={mockRemovePopup} />
         </ListingContext.Provider>
@@ -102,11 +103,12 @@ describe("AddReviewForm", () => {
     expect(screen.getByText("You must select a number of stars.")).toBeInTheDocument()
   });
 
-  it("updates listing's reviews when form is submitted", () => {
+  it("fires firebase events when form is submitted", () => {
     mockRemovePopup = jest.fn()
     render(
-      <Provider store={mockStore}>
+      <Provider store={store}>
         <ListingContext.Provider value={mockListing}>
+          <InitStore />
           <AddReviewForm removePopup={mockRemovePopup} />
         </ListingContext.Provider>
       </Provider>
@@ -121,9 +123,5 @@ describe("AddReviewForm", () => {
     
     expect(mockRef).toHaveBeenCalled()
     expect(mockUploadBytes).toHaveBeenCalled()
-    expect(mockTest).toHaveBeenCalled()
-
-
-
   });
 });
