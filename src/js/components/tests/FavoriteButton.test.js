@@ -6,9 +6,7 @@ import { editShops } from "../../reduxFiles/slices/shopSlice";
 import { editUser, selectUser } from "../../reduxFiles/slices/userSlice";
 import { store } from "../../reduxFiles/store";
 import FavoriteButton from "../FavoriteButton";
-import { mockListings } from "./mockRedux/mockListings";
-import { mockShops } from "./mockRedux/mockShops";
-import { mockUser } from "./mockRedux/mockUser";
+import InitStore from "./utils/InitStore";
 
 let favItem = {
   name: "shirt",
@@ -46,13 +44,6 @@ let shop = {
 };
 
 describe("FavoriteButton", () => {
-  const InitStore = () => {
-    let dispatch = useDispatch();
-    dispatch(editUser(mockUser));
-    dispatch(editListings(mockListings));
-    dispatch(editShops(mockShops));
-    return <></>;
-  };
 
   it("renders as a div with an image", () => {
     render(
@@ -68,7 +59,6 @@ describe("FavoriteButton", () => {
     render(
       <Provider store={store}>
         <InitStore />
-
         <FavoriteButton item={listing} />
       </Provider>
     );
@@ -79,7 +69,6 @@ describe("FavoriteButton", () => {
     render(
       <Provider store={store}>
         <InitStore />
-
         <FavoriteButton item={favItem} />
       </Provider>
     );
@@ -90,7 +79,6 @@ describe("FavoriteButton", () => {
     render(
       <Provider store={store}>
         <InitStore />
-
         <FavoriteButton item={listing} />
       </Provider>
     );
@@ -102,7 +90,6 @@ describe("FavoriteButton", () => {
     render(
       <Provider store={store}>
         <InitStore />
-
         <FavoriteButton item={favItem} />
       </Provider>
     );
