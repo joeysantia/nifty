@@ -13,12 +13,12 @@ describe('StarButtons', () => {
 
     it('renders with no yellow stars if the stars prop equals zero', () => {
         render(<StarButtons stars={0} setStars={mockSetStars} />)
-        expect(screen.queryByTitle("yellow star")).not.toBeInTheDocument()
+        expect(screen.queryByTestId("yellow star")).not.toBeInTheDocument()
     })
 
     it('renders with 3 yellow stars if the stars prop equals 3', () => {
         render(<StarButtons stars={3} setStars={mockSetStars} />)
-        expect(screen.getAllByTitle("yellow star").length).toEqual(3)
+        expect(screen.getAllByTestId("yellow star").length).toEqual(3)
     })
 
     it('fires the setState function when a star is clicked', () => {
