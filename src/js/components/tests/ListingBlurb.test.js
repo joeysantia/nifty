@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import ListingBlurb from "../ListingBlurb"
+import shoes from "../../../img/shoes.jpg"
 
 jest.mock("../FavoriteButton", () => () => {
     return <h1>Favorite Button</h1>
@@ -15,9 +16,10 @@ describe("ListingBlurb", () => {
         price: 29.95,
         description: "New pair of shoes",
         options: [],
-        images: [],
+        images: [{shoes}],
         reviews: [],
-      }
+    }
+      
 
     it("renders with the listing's image, name, price, and reviews", () => {
         render(<ListingBlurb listing={listing} />)
