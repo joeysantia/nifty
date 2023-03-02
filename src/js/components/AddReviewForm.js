@@ -20,8 +20,8 @@ const AddReviewForm = ({ removePopup }) => {
   const [isValid, setIsValid] = useState(true)
 
   const dispatch = useDispatch();
-  const listing = useContext(ListingContext);
-  const listings = useSelector(selectListings);
+  let listing = useContext(ListingContext);
+  let listings = useSelector(selectListings);
   let shops = useSelector(selectShops);
 
   useEffect(() => {
@@ -35,10 +35,11 @@ const AddReviewForm = ({ removePopup }) => {
   }, [])
 
   async function submitReview(e) {
+    
+    e.preventDefault();
     if (stars === 0) {
         return setIsValid(false)
     }
-    e.preventDefault();
 
     let photoURL = null;
     let reviewId = uniqid()
@@ -46,37 +47,34 @@ const AddReviewForm = ({ removePopup }) => {
       const storageRef = ref(storage, `images/${reviewId}`)
       await uploadBytes(storageRef, photo)
       photoURL = await getDownloadURL(storageRef)
-      console.log(photoURL)
     }
 
     let review = {
-      reviewId,
-      stars,
-      description,
+      id: reviewId,
+      stars: stars,
+      description: description,
       photoURL: photoURL,
     };
 
-    for (let i = 0; i < listings.length; i++) {
-      if (listings[i].id === listing.id) {
-        listings[i].reviews.push(review);
-        dispatch(editListings(listings));
-        break;
-      }
-    }
 
-    for (let i = 0; i < shops.length; i++) {
-      if (shops[i].id === listing.shopId) {
-        shops[i].reviews.push(review);
-        dispatch(editShops(shops));
-        break;
-      }
-    }
-
+    updateItems(listings, listing.id, review)
+    updateItems(shops, listing.shopId, review)
     removePopup()
-  }
 
+    function updateItems(items, id, review) {
+      let copy = JSON.parse(JSON.stringify(items))
+      for (let i = 0; i < copy.length; i++) {
+        
+        if (copy[i].id === id) {
+          copy[i].reviews.push(review)
+          dispatch(id === listing.shopId ? editShops(copy) : editListings(copy))
+          break;
+        } 
+      }
+    }
+  }
   return (
-    <form id="add-review-form" onSubmit={(e) => submitReview(e)}>
+    <form id="add-review-form" onSubmit={async (e) => await submitReview(e)}>
       <legend>
         <h2>Write a review</h2>
         <p>Your review and profile information will be publicly displayed.</p>
