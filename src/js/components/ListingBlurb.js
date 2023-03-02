@@ -1,22 +1,24 @@
-import { useState } from "react"
-import FavoriteButton from "./FavoriteButton"
-import ReviewHeader from "./ReviewHeader"
+import { useState } from "react";
+import FavoriteButton from "./FavoriteButton";
+import ReviewHeader from "./ReviewHeader";
+import "../../css/ListingBlurb.css"
 
 const ListingBlurb = ({ listing }) => {
-    const [isMouseHovering, setIsMouseHovering] = useState(false)
+  const [isMouseHovering, setIsMouseHovering] = useState(false);
 
-    return (
-        <div
-            onMouseEnter={() => setIsMouseHovering(true)}
-            onMouseLeave={() => setIsMouseHovering(false)}
-        >
-            <img src={listing.images[0]} alt="listing"></img>
-            <p>{listing.name}</p>
-            <ReviewHeader reviews={listing.reviews} />
-            <h4>${listing.price}</h4>
-            {isMouseHovering && <FavoriteButton item={listing} />}
-        </div>
-    )
-}
+  return (
+    <div
+      className="listing-blurb"
+      onMouseEnter={() => setIsMouseHovering(true)}
+      onMouseLeave={() => setIsMouseHovering(false)}
+    >
+      <img src={listing.img.src} alt={listing.img.alt}></img>
+      <p>{listing.name}</p>
+      <ReviewHeader reviews={listing.reviews} />
+      <h4>${listing.price}</h4>
+      {isMouseHovering && <FavoriteButton item={listing} />}
+    </div>
+  );
+};
 
-export default ListingBlurb
+export default ListingBlurb;

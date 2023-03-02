@@ -16,7 +16,10 @@ describe("ListingBlurb", () => {
         price: 29.95,
         description: "New pair of shoes",
         options: [],
-        images: [{shoes}],
+        images: [{
+            src: "../../../img/shoes.jpg",
+            alt: "shoes"
+        }],
         reviews: [],
     }
       
