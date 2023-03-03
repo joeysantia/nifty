@@ -1,4 +1,5 @@
-/** @jest-environment jsdom */
+/** @jest-environment jsdom
+ */
 import { render, screen } from "@testing-library/react";
 import { Provider, useSelector } from "react-redux";
 import AddReviewForm from "../AddReviewForm";
@@ -14,7 +15,6 @@ let mockRef = jest.fn();
 mockRef.mockReturnValue("reference");
 let mockUploadBytes = jest.fn();
 let mockGetDownloadURL = jest.fn();
-mockGetDownloadURL.mockReturnValue("www.photo.com");
 jest.mock("firebase/storage", () => {
   return {
     ...jest.requireActual("firebase/storage"),
@@ -113,7 +113,7 @@ describe("AddReviewForm", () => {
     ).toBeInTheDocument();
   });
 
-  it("fires firebase events when form is submitted", () => {
+  it("fires firebase events when form is submitted", async () => {
     mockRemovePopup = jest.fn();
     render(
       <Provider store={store}>
@@ -125,17 +125,19 @@ describe("AddReviewForm", () => {
     );
 
     const file = new File(["test"], "test.png", { type: "image/png" });
-
-    userEvent.type(screen.getByRole("textbox"), "I love this item!");
-    userEvent.click(screen.getByAltText("4 stars"));
-    userEvent.upload(screen.getByTitle("review-photo"), file);
-    userEvent.click(screen.getByRole("button", { name: "Post your review" }));
+    await act(() => {
+      userEvent.type(screen.getByRole("textbox"), "I love this item!");
+      userEvent.click(screen.getByAltText("4 stars"));
+      userEvent.upload(screen.getByTitle("review-photo"), file);
+      userEvent.click(screen.getByRole("button", { name: "Post your review" }));
+    });
 
     expect(mockRef).toHaveBeenCalled();
     expect(mockUploadBytes).toHaveBeenCalled();
+    expect(mockGetDownloadURL).toHaveBeenCalled();
   });
 
-  it.only("will update listing reviews and shop reviews when submit event fires", async () => {
+  it("will update listing reviews and shop reviews when submit event fires", async () => {
     mockRemovePopup = jest.fn();
     mockListing = {
       name: "shoes",
@@ -185,13 +187,11 @@ describe("AddReviewForm", () => {
     const file = new File(["test"], "test.png", { type: "image/png" });
 
     await act(() => {
-
-    userEvent.type(screen.getByRole("textbox"), "I love this item!");
-    userEvent.click(screen.getByAltText("4 stars"));
-    userEvent.upload(screen.getByTitle("review-photo"), file);
-    userEvent.click(screen.getByRole("button", { name: "Post your review" }));
-
-    })
+      userEvent.type(screen.getByRole("textbox"), "I love this item!");
+      userEvent.click(screen.getByAltText("4 stars"));
+      userEvent.upload(screen.getByTitle("review-photo"), file);
+      userEvent.click(screen.getByRole("button", { name: "Post your review" }));
+    });
     expect(screen.getByTestId("listing review length").textContent).toMatch(
       /1/
     );
