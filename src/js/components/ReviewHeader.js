@@ -1,5 +1,5 @@
 import ReviewStars from "./ReviewStars"
-
+import "../../css/ReviewHeader.css"
 const ReviewHeader = ({ reviews }) => {
     let avgStars = (reviews.length > 0 && reviews.reduce((prev, cur) => prev + cur.stars, 0) / reviews.length) || 0
 
@@ -7,11 +7,7 @@ const ReviewHeader = ({ reviews }) => {
     let remainder = avgStars % intStars
     
     if (remainder >= .25) {
-        if (remainder >= .75) {
-            intStars++
-        } else {
-            intStars += 0.5
-        }
+        intStars += (remainder >= .75 ? 1 : 0.5)
     }
 
     return (
