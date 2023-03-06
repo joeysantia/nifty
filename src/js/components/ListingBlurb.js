@@ -12,7 +12,7 @@ const ListingBlurb = ({ listing }) => {
       onMouseEnter={() => setIsMouseHovering(true)}
       onMouseLeave={() => setIsMouseHovering(false)}
     >
-      <img src={listing.img.src} alt={listing.img.alt}></img>
+      <img src={listing.images.src} alt={listing.images.alt}></img>
       <p>{listing.name}</p>
       <ReviewHeader reviews={listing.reviews} />
       <h4>${listing.price}</h4>
