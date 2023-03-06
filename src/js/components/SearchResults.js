@@ -1,11 +1,12 @@
 import ListingBlurb from "./ListingBlurb";
 import ShopBlurb from "./ShopBlurb";
+import "../../css/SearchResults.css"
 
 const SearchResults = ({ results }) => {
   return (
     <main id="search-results">
       <h2>Search results</h2>
-      <div className="search-results-grid">
+      <div id="search-results-grid">
         {results.map((item, i) => {
           return item.type === "listing" ? (
             <ListingBlurb key={i} listing={item} />
