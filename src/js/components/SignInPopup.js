@@ -6,6 +6,9 @@ import {
 import { useEffect, useState } from "react";
 import { auth } from "../firebaseFiles/firebase.config";
 import popupListener from "../helpers/popupListener";
+import "../../css/SignInPopup.css"
+import cancelIcon from "../../img/cancel.png"
+import googleIcon from "../../img/google.png"
 
 const SignInPopup = ({ removePopup }) => {
   const [registeringNewAccount, setRegisteringNewAccount] = useState(false);
@@ -39,9 +42,9 @@ const SignInPopup = ({ removePopup }) => {
   }, [email, password]);
 
   return (
-    <div id="sign-in-popup">
+    <div id="sign-in-popup"> 
       <form onSubmit={(e) => signInWithEmailAndPassword(auth, email, password)}>
-        <img src="replace-me" alt="delete" onClick={() => removePopup()} />
+        <img src={cancelIcon} alt="delete" onClick={() => removePopup()} />
         <div className="top-row">
           <h2>{registeringNewAccount ? "Create your account" : "Sign in"}</h2>
           {!registeringNewAccount ? (
@@ -63,13 +66,13 @@ const SignInPopup = ({ removePopup }) => {
         <div>
           <label htmlFor="password">Password</label>
           <input
-            type="text"
+            type="password"
             name="password"
             data-testid="password"
             required
             onInput={(e) => setPassword(e.target.value)}
           />
-          <p>Passwords must be at least 8 characters long and contain a capital letter and a number.</p>
+          {registeringNewAccount ? <p>Passwords must be at least 8 characters long and contain a capital letter and a number.</p> : null }
         </div>
         <button data-testid="register-button-two" type="submit" disabled={!inputsAreValid}>
           {registeringNewAccount ? "Register" : "Sign In"}
@@ -77,7 +80,7 @@ const SignInPopup = ({ removePopup }) => {
       </form>
       <div>
         <button onClick={() => signInWithPopup(auth, new GoogleAuthProvider())}>
-          <img src="replace-me" alt="google"></img>
+          <img src={googleIcon} alt="google"></img>
           <span>Continue with Google</span>
         </button>
       </div>
