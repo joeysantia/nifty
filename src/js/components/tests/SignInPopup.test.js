@@ -54,7 +54,7 @@ describe("SignInPopup", () => {
     expect(
       screen.getByRole("heading", { name: "Create your account" })
     ).toBeInTheDocument();
-    expect(screen.queryByTestId("register-button-one")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("register-button-one").textContent).toMatch(/sign in/i);
     expect(screen.getByTestId("register-button-two").textContent).toMatch(
       /register/i
     );
