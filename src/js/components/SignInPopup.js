@@ -6,9 +6,9 @@ import {
 import { useEffect, useState } from "react";
 import { auth } from "../firebaseFiles/firebase.config";
 import popupListener from "../helpers/popupListener";
-import "../../css/SignInPopup.css"
-import cancelIcon from "../../img/cancel.png"
-import googleIcon from "../../img/google.png"
+import "../../css/SignInPopup.css";
+import cancelIcon from "../../img/cancel.png";
+import googleIcon from "../../img/google.png";
 
 const SignInPopup = ({ removePopup }) => {
   const [registeringNewAccount, setRegisteringNewAccount] = useState(false);
@@ -18,9 +18,9 @@ const SignInPopup = ({ removePopup }) => {
 
   useEffect(() => {
     const signInPopup = document.querySelector("#sign-in-popup");
-    document.body.addEventListener("click", (e) =>
+    document.body.addEventListener("click", (e) => {
       popupListener(signInPopup, e.target, removePopup)
-    );
+  });
     return () => {
       document.body.removeEventListener("click", (e) =>
         popupListener(signInPopup, e.target, removePopup)
@@ -42,16 +42,18 @@ const SignInPopup = ({ removePopup }) => {
   }, [email, password]);
 
   return (
-    <div id="sign-in-popup"> 
+    <div id="sign-in-popup">
       <form onSubmit={(e) => signInWithEmailAndPassword(auth, email, password)}>
         <img src={cancelIcon} alt="delete" onClick={() => removePopup()} />
         <div className="top-row">
           <h2>{registeringNewAccount ? "Create your account" : "Sign in"}</h2>
-          {!registeringNewAccount ? (
-            <button data-testid="register-button-one" onClick={() => setRegisteringNewAccount(true)}>
-              Register
+            
+            <button
+              data-testid="register-button-one"
+              onClick={() => setRegisteringNewAccount(registeringNewAccount => !registeringNewAccount)}
+            >
+              {registeringNewAccount ? "Sign In" : "Register"}
             </button>
-          ) : null}
         </div>
         <div>
           <label htmlFor="email">Email</label>
@@ -72,14 +74,26 @@ const SignInPopup = ({ removePopup }) => {
             required
             onInput={(e) => setPassword(e.target.value)}
           />
-          {registeringNewAccount ? <p>Passwords must be at least 8 characters long and contain a capital letter and a number.</p> : null }
+          {registeringNewAccount ? (
+            <p><strong>
+              *Passwords must be at least 8 characters long and contain a capital
+              letter and a number.
+            </strong></p>
+          ) : null}
         </div>
-        <button data-testid="register-button-two" type="submit" disabled={!inputsAreValid}>
+        <button
+          data-testid="register-button-two"
+          type="submit"
+          disabled={!inputsAreValid}
+        >
           {registeringNewAccount ? "Register" : "Sign In"}
         </button>
       </form>
       <div>
-        <button onClick={() => signInWithPopup(auth, new GoogleAuthProvider())}>
+        <button
+          id="google-button"
+          onClick={() => signInWithPopup(auth, new GoogleAuthProvider())}
+        >
           <img src={googleIcon} alt="google"></img>
           <span>Continue with Google</span>
         </button>
@@ -88,4 +102,4 @@ const SignInPopup = ({ removePopup }) => {
   );
 };
 
-export default SignInPopup
+export default SignInPopup;
