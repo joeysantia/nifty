@@ -7,17 +7,16 @@ import {
   selectListings,
 } from "../reduxFiles/slices/listingSlice";
 import { editUser, selectUser } from "../reduxFiles/slices/userSlice";
-import { CartContext } from "../context/CartContext";
 
-const ItemSummary = ({ item }) => {
+const ItemSummary = ({ item, cart, setCart }) => {
   const [quantity, setQuantity] = useState(item.quantity);
-  const [cart, setCart] = useContext(CartContext)
 
   useEffect(() => {
-    item.quantity = quantity
+    let updatedItem = JSON.parse(JSON.stringify(item))
+    updatedItem.quantity = quantity
     for (let i = 0; i < cart.length; i++) {
-      if (cart[i].id === item.id) {
-        cart[i] = item
+      if (cart[i].id === updatedItem.id) {
+        cart[i] = updatedItem
         setCart(cart)
         break;
       }

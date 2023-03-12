@@ -1,11 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { act } from "react-dom/test-utils";
-import { Provider } from "react-redux";
-import { CartContext } from "../../context/CartContext";
-import { store } from "../../reduxFiles/store";
 import ItemSummary from "../ItemSummary";
-import InitStore from "./utils/InitStore";
 
 jest.mock("../Counter.js", () => ({ quantity, setQuantity }) => {
   return (
@@ -84,9 +79,7 @@ describe("ItemSummary", () => {
     let item = JSON.parse(JSON.stringify(baseItem))
     
     render(
-      <CartContext.Provider value={[cart, setCart]}>
-        <ItemSummary item={item} />
-      </CartContext.Provider>
+        <ItemSummary cart={cart} setCart={setCart} item={item} />
     );
     expect(screen).toMatchSnapshot();
   });
@@ -96,9 +89,7 @@ describe("ItemSummary", () => {
     let item = JSON.parse(JSON.stringify(baseItem))
     
     render(
-      <CartContext.Provider value={[cart, setCart]}>
-        <ItemSummary item={item} />
-      </CartContext.Provider>
+        <ItemSummary cart={cart} setCart={setCart} item={item} />
     );
     userEvent.click(screen.getByTestId("counter"));
     expect(screen.getByRole("heading").textContent).toMatch(/\$3/i);
@@ -109,9 +100,7 @@ describe("ItemSummary", () => {
     let item = JSON.parse(JSON.stringify(baseItem))
     
     render(
-      <CartContext.Provider value={[cart, setCart]}>
-        <ItemSummary item={item} />
-      </CartContext.Provider>
+        <ItemSummary cart={cart} setCart={setCart} item={item} />
     );
     userEvent.click(screen.getByTestId("counter"));
     expect(setCart).toHaveBeenCalled();
@@ -157,9 +146,7 @@ describe("ItemSummary", () => {
     let item = JSON.parse(JSON.stringify(baseItem))
 
     render(
-      <CartContext.Provider value={[cart, setCart]}>
-        <ItemSummary item={item} />
-      </CartContext.Provider>
+        <ItemSummary cart={cart} setCart={setCart} item={item} />
     );
     userEvent.click(screen.getByTestId("counter"));
     expect(setCart.mock.calls[0][0]).toEqual(updatedCart);
@@ -171,9 +158,7 @@ describe("ItemSummary", () => {
     let item = JSON.parse(JSON.stringify(baseItem))
 
     render(
-      <CartContext.Provider value={[cart, setCart]}>
-        <ItemSummary item={item} />
-      </CartContext.Provider>
+        <ItemSummary cart={cart} setCart={setCart} item={item} />
     );
     userEvent.click(screen.getByRole("button", { name: "Remove from cart" }));
     expect(setCart).toHaveBeenCalled();
@@ -205,9 +190,7 @@ describe("ItemSummary", () => {
     let item = JSON.parse(JSON.stringify(baseItem))
 
     render(
-      <CartContext.Provider value={[cart, setCart]}>
-        <ItemSummary item={item} />
-      </CartContext.Provider>
+        <ItemSummary cart={cart} setCart={setCart} item={item} />
     );
     userEvent.click(screen.getByRole("button", { name: "Remove from cart" }));
     console.log(setCart.mock.calls[0][0])
